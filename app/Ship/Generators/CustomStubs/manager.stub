@@ -1,0 +1,10 @@
+<?php
+
+namespace App\Containers\{{section-name}}\Managers;
+
+use App\Ship\Parents\Managers\Manager as ParentManager;
+
+class {{class-name}} extends ParentManager
+{
+
+}

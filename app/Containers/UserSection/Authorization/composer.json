@@ -1,0 +1,8 @@
+{
+    "name": "apiato/authorization",
+    "description": "apiato Container.",
+    "type": "apiato-container",
+    "require-dev": {
+        "roave/security-advisories": "dev-latest"
+    }
+}
