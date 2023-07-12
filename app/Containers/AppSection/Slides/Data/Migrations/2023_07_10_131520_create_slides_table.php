@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('slider_id')->constrained('sliders')->onDelete('cascade')->onUpdate('cascade')->references('id')->on('sliders');
             $table->string('name');
-            $table->string('url');
+            $table->tinyText('url');
             $table->unsignedTinyInteger('ordering')->nullable();
             $table->boolean('is_publish')->default(false);
             $table->timestamps();

@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('product_fields', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('category_id')->nullable()->references('id')->on('categories');
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade')->onUpdate('cascade')->references('id')->on('categories');
             $table->string('name');
             $table->timestamps();
             //$table->softDeletes();

@@ -4,11 +4,11 @@ namespace App\Enums;
 
 enum MediaConversionEnum
 {
-    public const  SMALL = 'small';
-    public const LARGE = 'large';
+    public const  MEDIA_CONVERSION_SIZE_SMALL = 'small';
+    public const MEDIA_CONVERSION_SIZE_LARGE = 'large';
 
     public const PARAMS = [
-        self::SMALL => 'Маленькая',
-        self::LARGE => 'Большая',
+        self::MEDIA_CONVERSION_SIZE_SMALL => 'Маленькая',
+        self::MEDIA_CONVERSION_SIZE_LARGE => 'Большая',
     ];
 }

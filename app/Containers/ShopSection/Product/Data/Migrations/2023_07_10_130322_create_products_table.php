@@ -14,9 +14,9 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();;
-            $table->foreignId('category_id')->nullable()->references('id')->on('categories');
-            $table->unsignedBigInteger('price')->change();
-            $table->string('description')->nullable();
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade')->onUpdate('cascade')->references('id')->on('categories');
+            $table->unsignedBigInteger('price');
+            $table->text('description')->nullable();
             $table->unsignedTinyInteger('ordering')->nullable();
             $table->timestamps();
             $table->softDeletes();
