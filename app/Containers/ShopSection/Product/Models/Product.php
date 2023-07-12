@@ -12,6 +12,7 @@ use App\Ship\Traits\Accessors\NameAccessor;
 use App\Ship\Traits\Accessors\OrderingAccessor;
 use App\Ship\Traits\Accessors\SlugAccessor;
 use App\Ship\Traits\Relationships\HasCategoryRelation;
+use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -46,7 +47,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class Product extends ParentModel
+class Product extends ParentModel implements HasMedia
 {
     use NameAccessor, SlugAccessor, OrderingAccessor, HasCategoryRelation, InteractsWithMedia;
 

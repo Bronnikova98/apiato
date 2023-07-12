@@ -10,6 +10,7 @@ use App\Ship\Parents\Models\Model as ParentModel;
 use App\Ship\Traits\Accessors\NameAccessor;
 use App\Ship\Traits\Accessors\OrderingAccessor;
 use App\Ship\Traits\Accessors\SlugAccessor;
+use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -42,7 +43,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static \Illuminate\Database\Eloquent\Builder|Category whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class Category extends ParentModel
+class Category extends ParentModel implements HasMedia
 {
     use NameAccessor, SlugAccessor, OrderingAccessor, InteractsWithMedia;
 

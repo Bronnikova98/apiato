@@ -5,6 +5,8 @@ namespace App\Containers\UserSection\User\Models;
 use App\Containers\UserSection\Authentication\Traits\AuthenticationTrait;
 use App\Containers\UserSection\Authorization\Traits\AuthorizationTrait;
 use App\Ship\Parents\Models\UserModel as ParentUserModel;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasName;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
 
@@ -53,7 +55,7 @@ use Illuminate\Notifications\Notifiable;
  * @method static Builder|User whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class User extends ParentUserModel
+class User extends ParentUserModel implements FilamentUser, HasName
 {
     use AuthorizationTrait;
     use AuthenticationTrait;
@@ -158,7 +160,15 @@ class User extends ParentUserModel
         });
     }
 
+    public function canAccessFilament(): bool
+    {
+        return true;
+    }
 
+    public function getFilamentName(): string
+    {
+        return $this->getLName();
+    }
 }
 
 

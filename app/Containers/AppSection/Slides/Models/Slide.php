@@ -10,6 +10,7 @@ use App\Ship\Traits\Accessors\IsPublishAccessor;
 use App\Ship\Traits\Accessors\NameAccessor;
 use App\Ship\Traits\Accessors\OrderingAccessor;
 use Spatie\Image\Manipulations;
+use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -38,7 +39,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static \Illuminate\Database\Eloquent\Builder|Slide whereUrl($value)
  * @mixin \Eloquent
  */
-class Slide extends ParentModel
+class Slide extends ParentModel implements HasMedia
 {
     use NameAccessor, OrderingAccessor, IsPublishAccessor, InteractsWithMedia;
 
