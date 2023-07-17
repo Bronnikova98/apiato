@@ -7,6 +7,8 @@ use App\Containers\ShopSection\Product_field_values\Models\ProductFieldValue;
 use App\Ship\Parents\Models\Model as ParentModel;
 use App\Ship\Traits\Accessors\NameAccessor;
 use App\Ship\Traits\Relationships\HasCategoryRelation;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 /**
  * App\Containers\ShopSection\Product_fields\Models\ProductField
@@ -52,27 +54,17 @@ class ProductField extends ParentModel
      */
     protected string $resourceKey = 'ProductField';
 
-    public function getProductFieldsValues(): \Illuminate\Database\Eloquent\Collection|array
+    public function getProductFieldsValues(): Collection
     {
         return $this->productFieldsValues;
     }
 
-    public function setProductFieldsValues(\Illuminate\Database\Eloquent\Collection|array $productFieldsValues): void
+    public function setProductFieldsValues(Collection $productFieldsValues): void
     {
         $this->productFieldsValues = $productFieldsValues;
     }
 
-    public function getProductFieldsValuesCount(): ?int
-    {
-        return $this->product_fields_values_count;
-    }
-
-    public function setProductFieldsValuesCount(?int $product_fields_values_count): void
-    {
-        $this->product_fields_values_count = $product_fields_values_count;
-    }
-
-    public function productFieldsValues(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function productFieldsValues(): HasMany
     {
         return $this->hasMany(ProductFieldValue::class);
     }

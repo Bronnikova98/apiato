@@ -3,17 +3,24 @@
 namespace App\Filament\Resources;
 
 use App\Enums\MediaCollectionEnum;
+use App\Filament\Components\CustomImageUpload;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Containers\ShopSection\Product\Models\Product;
 use Closure;
-use Filament\Forms;
 use Filament\Forms\Components\Card;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Tabs\Tab;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
+use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Str;
@@ -28,8 +35,9 @@ class ProductResource extends Resource
     {
         return $form
             ->schema([
-                Card::make()->schema([
+                Grid::make(2)->schema([
                     TextInput::make('name')
+                        ->label('Название')
                         ->autofocus()
                         ->maxLength(191)
                         ->reactive()
@@ -40,28 +48,64 @@ class ProductResource extends Resource
                         ->required(),
 
                     TextInput::make('slug')
+                        ->label('Ссылка')
                         ->maxLength(191)
                         ->required(),
 
-                    Forms\Components\BelongsToSelect::make('category_id')
+                    TextInput::make('price')
+                        ->label('Цена')
+                        ->numeric()
+                        ->maxLength(263)
+                        ->required(),
+
+                    Select::make('category_id')
+                        ->label('Категория')
                         ->relationship('category', 'name')
                         ->required(),
 
-                    TextInput::make('price')
-                        ->numeric()
-                        ->maxLength(263),
-
-                    Forms\Components\Textarea::make('description')
+                    Textarea::make('description')
+                        ->label('Описание')
                         ->maxLength(65535),
 
                     TextInput::make('ordering')
+                        ->label('Порядок отображения')
                         ->numeric()
                         ->maxLength(255),
+                ]),
 
-                    Forms\Components\SpatieMediaLibraryFileUpload::make('thumbnail')
-                        ->collection(MediaCollectionEnum::MEDIA_COLLECTION_PRODUCT),
+                Grid::make(4)->schema([
+                        CustomImageUpload::make('thumbnail')
+                            ->label('Изображения')
+                            ->collection(MediaCollectionEnum::MEDIA_COLLECTION_PRODUCT)
+                            ->maxSize(5120)
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/jpg'])
+                            ->multiple()
+                            ->maxFiles(5)
+                            ->minFiles(1)
+                            ->enableOpen()
+                            ->enableDownload()
+                            ->enableReordering()
+                            ->helperText('До 5 файлов. Максимальный размер каждого: 5Мб. Допустимые типы: .png, .jpg, .webp')
 
-                ])
+                            ->required(),
+                ]),
+
+                Grid::make(1)->schema([
+                    Repeater::make('productFieldValues')
+                        ->label('Значения характеристик продукта')
+                        ->relationship()
+                        ->schema([
+                            Select::make('product_field_id')
+                                ->label('Характеристика')
+                                ->relationship('productField', 'name')
+                                ->required(),
+
+                            TextInput::make('value')
+                                ->label('Значение')
+                                ->maxLength(191)
+                                ->required(),
+                        ])->columns(2),
+                ]),
             ]);
     }
 
@@ -69,11 +113,20 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id'),
-                Tables\Columns\TextColumn::make('name')->limit(50),
-                Tables\Columns\TextColumn::make('price'),
-                Tables\Columns\TextColumn::make('description')->limit(50),
-                Tables\Columns\TextColumn::make('ordering'),
+                TextColumn::make('id')
+                    ->toggleable(),
+                TextColumn::make('name')
+                    ->limit(25)
+                    ->label('Название'),
+                TextColumn::make('price')
+                    ->label('Цена'),
+                TextColumn::make('description')
+                    ->limit(25)
+                    ->label('Описание'),
+                TextColumn::make('ordering'),
+                SpatieMediaLibraryImageColumn::make('thumbnail')
+                    ->label('Изображения')
+                    ->collection(MediaCollectionEnum::MEDIA_COLLECTION_PRODUCT),
             ])
             ->filters([
                 //

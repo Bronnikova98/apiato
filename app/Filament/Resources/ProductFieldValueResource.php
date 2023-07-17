@@ -5,13 +5,14 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ProductFieldValueResource\Pages;
 use App\Filament\Resources\ProductFieldValueResource\RelationManagers;
 use App\Containers\ShopSection\Product_field_values\Models\ProductFieldValue;
-use Filament\Forms;
-use Filament\Forms\Components\Card;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -25,20 +26,21 @@ class ProductFieldValueResource extends Resource
     {
         return $form
             ->schema([
-                Card::make()->schema([
-
-                    Forms\Components\BelongsToSelect::make('product_field_id')
+                Grid::make(2)->schema([
+                    Select::make('product_field_id')
+                        ->label('Характеристика продукта')
                         ->relationship('productField', 'name')
                         ->required(),
 
-                    Forms\Components\BelongsToSelect::make('product_id')
+                    Select::make('product_id')
+                        ->label('Продукт')
                         ->relationship('product', 'name')
                         ->required(),
 
                     TextInput::make('value')
+                        ->label('Значение')
                         ->maxLength(191)
                         ->required(),
-
                 ])
             ]);
     }
@@ -47,8 +49,10 @@ class ProductFieldValueResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id'),
-                Tables\Columns\TextColumn::make('value'),
+                TextColumn::make('id')
+                    ->toggleable(),
+                TextColumn::make('value')
+                    ->label('Значение'),
             ])
             ->filters([
                 //

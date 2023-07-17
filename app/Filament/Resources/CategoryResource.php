@@ -3,17 +3,19 @@
 namespace App\Filament\Resources;
 
 use App\Enums\MediaCollectionEnum;
+use App\Filament\Components\CustomImageUpload;
 use App\Filament\Resources\CategoryResource\Pages;
 use App\Filament\Resources\CategoryResource\RelationManagers;
 use App\Containers\ShopSection\Category\Models\Category;
-use Filament\Forms;
-use Filament\Forms\Components\Card;
-use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
+use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Str;
@@ -30,8 +32,9 @@ class CategoryResource extends Resource
     {
         return $form
             ->schema([
-                Card::make()->schema([
+                Grid::make(2)->schema([
                     TextInput::make('name')
+                        ->label('Категория')
                         ->autofocus()
                         ->maxLength(191)
                         ->reactive()
@@ -42,20 +45,44 @@ class CategoryResource extends Resource
                         ->required(),
 
                     TextInput::make('slug')
+                        ->label('Ссылка')
                         ->maxLength(191)
                         ->required(),
 
                     TextInput::make('description')
+                        ->label('Описание')
                         ->maxLength(191),
 
                     TextInput::make('ordering')
+                        ->label('Порядок отображения')
                         ->numeric()
                         ->maxLength(127),
+                ]),
 
-                    Forms\Components\SpatieMediaLibraryFileUpload::make('thumbnail')
-                        ->collection(MediaCollectionEnum::MEDIA_COLLECTION_CATEGORY),
+                Grid::make(2)->schema([
+                    CustomImageUpload::make('thumbnail')
+                        ->label('Изображение')
+                        ->collection(MediaCollectionEnum::MEDIA_COLLECTION_CATEGORY)
+                        ->required()
+                        ->minFiles(1)
+                        ->enableOpen()
+                        ->enableDownload()
+                        ->maxSize(5120)
+                        ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/jpg'])
+                        ->helperText('Максимальный размер: 5Мб. Допустимые типы: .png, .jpg, .jpeg'),
+                ]),
 
-                ])
+                Grid::make(1)->schema([
+                    Repeater::make('productFields')
+                        ->label('Характеристики продукта')
+                        ->relationship()
+                        ->schema([
+                            TextInput::make('name')
+                                ->label('Название характеристики')
+                                ->maxLength(191)
+                                ->required(),
+                        ]),
+                ]),
             ]);
     }
 
@@ -63,13 +90,19 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id'),
-                Tables\Columns\TextColumn::make('name')->limit(25),
-                Tables\Columns\TextColumn::make('slug')->limit(25),
-                Tables\Columns\TextColumn::make('description')->limit(50),
-                Tables\Columns\TextColumn::make('ordering'),
-                Tables\Columns\SpatieMediaLibraryImageColumn::make('thumbnail')
-                    ->collection(MediaCollectionEnum::MEDIA_COLLECTION_CATEGORY),
+                TextColumn::make('id')
+                    ->toggleable(),
+                TextColumn::make('name')
+                    ->limit(25)
+                    ->label('Название'),
+                TextColumn::make('description')
+                    ->limit(25)
+                    ->label('Описание'),
+                TextColumn::make('ordering')
+                    ->label('Порядок'),
+                SpatieMediaLibraryImageColumn::make('thumbnail')
+                    ->collection(MediaCollectionEnum::MEDIA_COLLECTION_CATEGORY)
+                    ->label('Изображение'),
 
             ])
             ->filters([

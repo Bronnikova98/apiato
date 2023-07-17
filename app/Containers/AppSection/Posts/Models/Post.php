@@ -12,6 +12,7 @@ use App\Ship\Traits\Accessors\SlugAccessor;
 use App\Ship\Traits\Accessors\TextAccessor;
 use App\Ship\Traits\Accessors\TitleAccessor;
 use Spatie\Image\Manipulations;
+use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -43,7 +44,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static \Illuminate\Database\Eloquent\Builder|Post whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class Post extends ParentModel
+class Post extends ParentModel implements HasMedia
 {
     use SlugAccessor, IsPublishAccessor, TitleAccessor, ShortDescriptionAccessor, DateAccessor, TextAccessor, InteractsWithMedia;
 

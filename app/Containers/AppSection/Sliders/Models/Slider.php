@@ -5,6 +5,7 @@ namespace App\Containers\AppSection\Sliders\Models;
 use App\Containers\AppSection\Slides\Models\Slide;
 use App\Ship\Parents\Models\Model as ParentModel;
 use App\Ship\Traits\Accessors\TitleAccessor;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * App\Containers\AppSection\Sliders\Models\Slider
@@ -44,8 +45,8 @@ class Slider extends ParentModel
      */
     protected string $resourceKey = 'Slider';
 
-    public function slides(): void
+    public function slides(): HasMany
     {
-        $this->hasMany(Slide::class);
+        return $this->hasMany(Slide::class);
     }
 }
