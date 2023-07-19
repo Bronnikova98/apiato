@@ -12,6 +12,9 @@ use App\Ship\Traits\Accessors\NameAccessor;
 use App\Ship\Traits\Accessors\OrderingAccessor;
 use App\Ship\Traits\Accessors\SlugAccessor;
 use App\Ship\Traits\Relationships\HasCategoryRelation;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
+use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -46,7 +49,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class Product extends ParentModel
+class Product extends ParentModel implements HasMedia
 {
     use NameAccessor, SlugAccessor, OrderingAccessor, HasCategoryRelation, InteractsWithMedia;
 
@@ -94,27 +97,17 @@ class Product extends ParentModel
         $this->price = $price;
     }
 
-    public function getProductFieldValues(): \Illuminate\Database\Eloquent\Collection|array
+    public function getProductFieldValues(): Collection
     {
         return $this->productFieldValues;
     }
 
-    public function setProductFieldValues(\Illuminate\Database\Eloquent\Collection|array $productFieldValues): void
+    public function setProductFieldValues(Collection $productFieldValues): void
     {
         $this->productFieldValues = $productFieldValues;
     }
 
-    public function getProductFieldValuesCount(): ?int
-    {
-        return $this->product_field_values_count;
-    }
-
-    public function setProductFieldValuesCount(?int $product_field_values_count): void
-    {
-        $this->product_field_values_count = $product_field_values_count;
-    }
-
-    public  function productFieldValues()
+    public  function productFieldValues(): HasMany
     {
         return $this->hasMany(ProductFieldValue::class);
     }

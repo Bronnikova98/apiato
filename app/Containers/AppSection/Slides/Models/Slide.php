@@ -9,7 +9,9 @@ use App\Ship\Parents\Models\Model as ParentModel;
 use App\Ship\Traits\Accessors\IsPublishAccessor;
 use App\Ship\Traits\Accessors\NameAccessor;
 use App\Ship\Traits\Accessors\OrderingAccessor;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\Image\Manipulations;
+use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -38,7 +40,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static \Illuminate\Database\Eloquent\Builder|Slide whereUrl($value)
  * @mixin \Eloquent
  */
-class Slide extends ParentModel
+class Slide extends ParentModel implements HasMedia
 {
     use NameAccessor, OrderingAccessor, IsPublishAccessor, InteractsWithMedia;
 
@@ -64,16 +66,6 @@ class Slide extends ParentModel
      */
     protected string $resourceKey = 'Slide';
 
-    public function getSliderId(): int
-    {
-        return $this->slider_id;
-    }
-
-    public function setSliderId(int $slider_id): void
-    {
-        $this->slider_id = $slider_id;
-    }
-
     public function getUrl(): string
     {
         return $this->url;
@@ -84,7 +76,7 @@ class Slide extends ParentModel
         $this->url = $url;
     }
 
-    public function slider(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function slider(): BelongsTo
     {
         return $this->belongsTo(Slider::class, 'slider_id');
     }

@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('product_field_id')->constrained('product_fields')->onDelete('cascade')->onUpdate('cascade')->references('id')->on('product_fields');
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade')->onUpdate('cascade')->references('id')->on('products');
-            $table->integer('value')->unsigned();
+            $table->string('value');
             $table->timestamps();
             //$table->softDeletes();
         });

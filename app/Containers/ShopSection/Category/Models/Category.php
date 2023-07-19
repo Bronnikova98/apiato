@@ -10,6 +10,9 @@ use App\Ship\Parents\Models\Model as ParentModel;
 use App\Ship\Traits\Accessors\NameAccessor;
 use App\Ship\Traits\Accessors\OrderingAccessor;
 use App\Ship\Traits\Accessors\SlugAccessor;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
+use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -42,7 +45,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static \Illuminate\Database\Eloquent\Builder|Category whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class Category extends ParentModel
+class Category extends ParentModel implements HasMedia
 {
     use NameAccessor, SlugAccessor, OrderingAccessor, InteractsWithMedia;
 
@@ -77,52 +80,22 @@ class Category extends ParentModel
         $this->description = $description;
     }
 
-    public function getProductFields(): \Illuminate\Database\Eloquent\Collection|array
+    public function getProductFields() : Collection
     {
         return $this->productFields;
     }
 
-    public function setProductFields(\Illuminate\Database\Eloquent\Collection|array $productFields): void
-    {
-        $this->productFields = $productFields;
-    }
-
-    public function getProductFieldsCount(): ?int
-    {
-        return $this->product_fields_count;
-    }
-
-    public function setProductFieldsCount(?int $product_fields_count): void
-    {
-        $this->product_fields_count = $product_fields_count;
-    }
-
-    public function getProducts(): \Illuminate\Database\Eloquent\Collection|array
+    public function getProducts(): Collection
     {
         return $this->products;
     }
 
-    public function setProducts(\Illuminate\Database\Eloquent\Collection|array $products): void
-    {
-        $this->products = $products;
-    }
-
-    public function getProductsCount(): ?int
-    {
-        return $this->products_count;
-    }
-
-    public function setProductsCount(?int $products_count): void
-    {
-        $this->products_count = $products_count;
-    }
-
-    public function products(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function products(): HasMany
     {
         return $this->hasMany(Product::class);
     }
 
-    public function productFields(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function productFields(): HasMany
     {
         return $this->hasMany(ProductField::class);
     }

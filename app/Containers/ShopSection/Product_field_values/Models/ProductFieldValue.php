@@ -5,6 +5,7 @@ namespace App\Containers\ShopSection\Product_field_values\Models;
 use App\Containers\ShopSection\Product\Models\Product;
 use App\Containers\ShopSection\Product_fields\Models\ProductField;
 use App\Ship\Parents\Models\Model as ParentModel;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\Containers\ShopSection\Product_field_values\Models\ProductFieldValue
@@ -49,26 +50,6 @@ class ProductFieldValue extends ParentModel
      */
     protected string $resourceKey = 'ProductFieldValue';
 
-    public function getProductFieldId(): int
-    {
-        return $this->product_field_id;
-    }
-
-    public function setProductFieldId(int $product_field_id): void
-    {
-        $this->product_field_id = $product_field_id;
-    }
-
-    public function getProductId(): int
-    {
-        return $this->product_id;
-    }
-
-    public function setProductId(int $product_id): void
-    {
-        $this->product_id = $product_id;
-    }
-
     public function getValue(): int
     {
         return $this->value;
@@ -99,12 +80,12 @@ class ProductFieldValue extends ParentModel
         $this->productField = $productField;
     }
 
-    public function productField(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function productField(): BelongsTo
     {
         return $this->belongsTo(ProductField::class, 'product_field_id');
     }
 
-    public function product(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class, 'product_id');
     }
