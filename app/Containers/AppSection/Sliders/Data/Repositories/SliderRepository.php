@@ -11,6 +11,6 @@ class SliderRepository extends ParentRepository
      */
     protected $fieldSearchable = [
         'id' => '=',
-        // ...
+
     ];
 }
